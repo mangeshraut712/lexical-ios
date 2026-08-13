@@ -59,14 +59,16 @@ final class TransformTests: XCTestCase {
 
           let textPart = textNode.getTextPart()
 
-          if textPart.contains(key) {
-            let count = (self.transformCount[key] ?? 0) + 1
-
-            try textNode.setText(textPart.replacingOccurrences(of: key, with: nextKey))
-
-            self.transformCount[key] = count
-            self.updateLog.append("\(key)\(count)_start")
+          guard textPart.contains(key) else {
+            return
           }
+
+          let count = (self.transformCount[key] ?? 0) + 1
+
+          try textNode.setText(textPart.replacingOccurrences(of: key, with: nextKey))
+
+          self.transformCount[key] = count
+          self.updateLog.append("\(key)\(count)_start")
         })
 
       teardowns.append(teardown)
@@ -86,13 +88,15 @@ final class TransformTests: XCTestCase {
 
         let textPart = textNode.getTextPart()
 
-        if textPart.contains(TransformTests.infiniteTransformKey) {
-          let count = (self.transformCount[TransformTests.infiniteTransformKey] ?? 0) + 1
-
-          try textNode.setText(textPart)
-          self.transformCount[TransformTests.infiniteTransformKey] = count
-          self.updateLog.append("\(TransformTests.infiniteTransformKey)\(count)_start")
+        guard textPart.contains(TransformTests.infiniteTransformKey) else {
+          return
         }
+
+        let count = (self.transformCount[TransformTests.infiniteTransformKey] ?? 0) + 1
+
+        try textNode.setText(textPart)
+        self.transformCount[TransformTests.infiniteTransformKey] = count
+        self.updateLog.append("\(TransformTests.infiniteTransformKey)\(count)_start")
       })
 
     let combinedTransform = editor.addNodeTransform(
@@ -111,14 +115,16 @@ final class TransformTests: XCTestCase {
 
         let combinedText = "\(TransformTests.lastTransformKey)\(TransformTests.combinedTransformKey)"
 
-        if textPart.contains(combinedText) {
-          let count = (self.transformCount[TransformTests.combinedTransformKey] ?? 0) + 1
-
-          try textNode.setText(textPart.replacingOccurrences(of: combinedText, with: TransformTests.terminalTransform))
-
-          self.transformCount[TransformTests.combinedTransformKey] = count
-          self.updateLog.append("\(TransformTests.combinedTransformKey)\(count)_start")
+        guard textPart.contains(combinedText) else {
+          return
         }
+
+        let count = (self.transformCount[TransformTests.combinedTransformKey] ?? 0) + 1
+
+        try textNode.setText(textPart.replacingOccurrences(of: combinedText, with: TransformTests.terminalTransform))
+
+        self.transformCount[TransformTests.combinedTransformKey] = count
+        self.updateLog.append("\(TransformTests.combinedTransformKey)\(count)_start")
       })
 
     teardowns.append(contentsOf: [infiniteTransform, combinedTransform])
