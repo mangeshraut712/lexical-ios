@@ -84,14 +84,16 @@ public final class Point {
   public func isAtNodeEnd() throws -> Bool {
     switch type {
     case .element:
-      if let elementNode = try getNode() as? ElementNode {
-        return offset == elementNode.children.count
+      guard let elementNode = try getNode() as? ElementNode else {
+        return false
       }
+      return offset == elementNode.children.count
 
     case .text:
-      if let textNode = try getNode() as? TextNode {
-        return offset == textNode.getTextPart().lengthAsNSString()
+      guard let textNode = try getNode() as? TextNode else {
+        return false
       }
+      return offset == textNode.getTextPart().lengthAsNSString()
     case .range:
       throw LexicalError.invariantViolation("Need range selection")
     case .node:
@@ -99,8 +101,6 @@ public final class Point {
     case .grid:
       throw LexicalError.invariantViolation("Need grid selection")
     }
-
-    return false
   }
 }
 
