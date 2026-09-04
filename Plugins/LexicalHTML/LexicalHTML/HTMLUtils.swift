@@ -65,20 +65,21 @@ private func appendNodesToHTML(editor: Editor, currentNode: Lexical.Node, parent
     }
   }
 
-  if shouldInclude && !shouldExclude {
-    for fragmentChild in fragmentElement.children() {
-      try element.appendChild(fragmentChild)
-    }
-    try parentElement.appendChild(element)
-
-    if let after {
-      if let newElement = try after(target, element) {
-        try element.replaceWith(newElement)
-      }
-    }
-  } else {
+  guard shouldInclude && !shouldExclude else {
     for fragmentChild in fragmentElement.children() {
       try parentElement.appendChild(fragmentChild)
+    }
+    return shouldInclude
+  }
+
+  for fragmentChild in fragmentElement.children() {
+    try element.appendChild(fragmentChild)
+  }
+  try parentElement.appendChild(element)
+
+  if let after {
+    if let newElement = try after(target, element) {
+      try element.replaceWith(newElement)
     }
   }
 
