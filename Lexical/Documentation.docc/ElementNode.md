@@ -41,10 +41,8 @@ belongs on ``TextNode``; native views belong on ``DecoratorNode``.
 - ``selectStart()``
 - ``selectEnd()``
 
-### Indent and direction
+### Indent
 
-- ``getDirection()``
-- ``setDirection(direction:)``
 - ``getIndent()``
 - ``setIndent(_:)``
 - ``canIndent()``
